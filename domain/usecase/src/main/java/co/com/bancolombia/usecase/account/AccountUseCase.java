@@ -14,17 +14,44 @@ public class AccountUseCase {
     private final AccountRepository repository;
 
     public Mono<Account> register(String name, String statusId){
-
-        return legalValidation(name)
-                .flatMap(legal -> disponibilityValidation())
-                .flatMap(disponibility -> getStatus(name))
+        return getStatus(name)
+                .flatMap(status -> Mono.zip(//par hacer las 2 primeras validaciones en paralelo
+                        legalValidation(name),
+                        disponibilityValidation()
+                ))
+                .map(TupleUtils.function((n1,n2)->{
+                    return n1.toString();
+                }))
                 .map(status -> generateAccount(name, status))
                 .flatMap(this::finalValidation)
                 .flatMap(this::saveAccount);
+         /*
+        return Mono.zip(//par hacer las 2 primeras validaciones en paralelo
+                        legalValidation(name),
+                        disponibilityValidation()
+                )
+                /*      Manera practica con utilidad reactor de usar la tupla
+                        .map(TupleUtils.function((n1,n2)->{
+                            return n1.toString();
+                        }))
+
+                 */
+                //        legalValidation(name)
+                //        .flatMap(legal -> disponibilityValidation())
+                /*       .map(tuple ->{//una forma de trabajar la tupla
+                           String t1 = tuple.getT1();
+                           Integer t2 = tuple.getT2();
+                           return "ALGO";
+                       })*/
+
+                //map(status -> generateAccount(name, status)).
+//                .flatMap(this::finalValidation)
+//                .flatMap(this::saveAccount);
     }
 
     private Account generateAccount (String name, String status){
-        return Account.newAccount(0, name, status);
+
+        return Account.newAccount(999, name, status);
     }
 
     private Mono<String> legalValidation(String accountName){
