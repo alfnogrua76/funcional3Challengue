@@ -15,14 +15,18 @@ public class AccountUseCase {
 
     public Mono<Account> register(String name, String statusId){
         return getStatus(name)
+                //Tambien se puede hacer pos Asociatividad
                 .flatMap(status -> Mono.zip(//par hacer las 2 primeras validaciones en paralelo
                         legalValidation(name),
                         disponibilityValidation()
-                ))
+                )
+                /*
                 .map(TupleUtils.function((n1,n2)->{
                     return n1.toString();
                 }))
-                .map(status -> generateAccount(name, status))
+                *///quito la forma de sacar las variables de la tupla  y paso el cierre del ultimo parentesis
+                // al de abajo linea 22 quito el ultimo ) y lo coloque en la 29 el ultimo )
+                .map(sta -> generateAccount(name, status)))
                 .flatMap(this::finalValidation)
                 .flatMap(this::saveAccount);
          /*
