@@ -26,7 +26,8 @@ public class Handler {
         return serverRequest.bodyToMono(RequestAccountDto.class)
                 .switchIfEmpty(Mono.error(new BusinessException(CHANNEL_TRANSACTION_NOT_FOUND)))
                 .flatMap(request -> useCase.register(request.getName(), request.getStatus()))
-                .flatMap(account -> ServerResponse.ok().bodyValue(account));//para darle cuerpo al body con la cuenta
+                .flatMap(account -> ServerResponse.ok().bodyValue(account))
+                .onErrorResume(BusinessException.class, error -> ServerResponse.badRequest().bodyValue(error.getMessage()));//para darle cuerpo al body con la cuenta
         //Este seria el return de la manera antigua de hacerlo ojo se debe evitar
         //return ServerResponse.ok().bodyValue(register);
     }
