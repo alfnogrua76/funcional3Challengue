@@ -2,17 +2,14 @@ package co.com.bancolombia.model.exceptions;
 
 import co.com.bancolombia.model.exceptions.message.BusinessErrorMessage;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class BusinessException extends RuntimeException{
 
-    private final BusinessErrorMessage businesserrorMessage;
+    private final BusinessErrorMessage errorMessage;
 
-    public BusinessException(BusinessErrorMessage businesserrorMessage) {
-        super(
-                 businesserrorMessage.getCode()
-        );
-        this.businesserrorMessage = businesserrorMessage;
+    public BusinessException(BusinessErrorMessage errorMessage) {
+        super(errorMessage.getCode());
+        this.errorMessage = errorMessage;
     }
 }
