@@ -15,8 +15,7 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(
 
-                POST("/api/usecase/register"), handler::listenPOSTUseCase
-
-                );
+                POST("/api/usecase/register"), handler::listenPOSTUseCase)
+                .and(route(GET("/api/otherusercase/path"), handler::listenGETOtherUseCase));
     }
 }

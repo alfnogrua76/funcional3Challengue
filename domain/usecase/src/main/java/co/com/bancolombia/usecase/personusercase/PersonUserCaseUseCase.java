@@ -1,7 +1,6 @@
 package co.com.bancolombia.usecase.personusercase;
 
-import co.com.bancolombia.model.person.Person;
-import co.com.bancolombia.model.person.gateways.PersonService;
+
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
